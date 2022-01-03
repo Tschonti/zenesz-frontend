@@ -1,4 +1,4 @@
-# ÖKGY akkordos dicsik - Songbook with accords
+# ÖKGY akkordos dicsik - Songbook with chords
 
 React application to view, create, edit or project song lyrics for Örömhír baptist church (ÖKGY).
 
