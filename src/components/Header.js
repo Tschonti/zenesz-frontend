@@ -14,7 +14,7 @@ const Header = (props) => {
             {props.alert.msg}
         </Alert>
         : null
-    const title = isMobileOnly ? <div className="big-text-nom">ÖKGY akkordos dicsik2</div> : <h2>ÖKGY akkordos dicsik</h2>
+    const title = isMobileOnly ? <div className="big-text-nom">ÖKGY akkordos dicsik</div> : <h2>ÖKGY akkordos dicsik</h2>
 
     const newSong = props.signedIn ? <Link to="/zenesz/songs/new" className="item header-link">Új ének</Link> : null
     return (
