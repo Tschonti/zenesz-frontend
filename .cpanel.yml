@@ -1,6 +1,7 @@
 ---
 deployment:
   tasks:
+    - npm run build
     - export DEPLOYPATH=/home/okgyhuxe/public_html/zenesz
     - /bin/cp -R build/static $DEPLOYPATH
     - /bin/cp .htaccess $DEPLOYPATH
