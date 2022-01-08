@@ -32,7 +32,7 @@ const MyModal = props => {
         <div className="centered">
             {alert}
         </div>
-        <Button color='lightgrey' onClick={() => setOpen(false)}>
+        <Button  onClick={() => setOpen(false)}>
           {props.closeText}
         </Button>
         <Button

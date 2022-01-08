@@ -5,6 +5,7 @@ import { isMobileOnly } from 'react-device-detect'
 
 import MyTooltip from '../MyTooltip'
 import MyModal from './../MyModal'
+import ColorSelector from './../ColorSelector'
 
 const renderInput = ({ input, label, meta, type, disabled, wide, tip }) => {
     return (
@@ -19,24 +20,6 @@ const renderInput = ({ input, label, meta, type, disabled, wide, tip }) => {
 const renderColorPicker = ({ type, disabled, val, setter, change }) => (
     <input value={val} type={type} autoComplete="off" disabled={disabled} id="colorPicker" onChange={(e) => {setter(e.target.value); change('color', e.target.value)}} />
 )
-
-const renderSelect = ({ disabled, colors, val, setter, change }) => {
-    let colorOptions = null
-    if (colors) {
-        colorOptions = colors.map(color => (
-            <option key={color} value={'#' + color} style={{color: '#' + color}}>
-                {'#' + color}
-            </option>
-        ))
-    }
-    return (
-        <select value={val} disabled={disabled} onChange={(e) => {setter(e.target.value); change('color', e.target.value)}} style={{color: val ? '#' + val : 'black'}}>
-            <option disabled selected value=''>Válassz egy színt</option>
-            {colorOptions}
-        </select>
-    )
-}
-
 
 const renderTextArea = ({ input, label, meta, tip, rows }) => {
     return (
@@ -96,11 +79,11 @@ const SongForm = props => {
     }
     const [colorOption, setColorOption] = useState(props.initialValues.color ? 'existing' : 'none')
     const [selectedColorDropdown, setSelectedColorDropdown] = useState(props.initialValues.color ? props.initialValues.color : '')
-    const [selectedColorPicker, setSelectedColorPicker] = useState('')
+    const [selectedColorPicker, setSelectedColorPicker] = useState(props.initialValues.color ? '#' + props.initialValues.color : '')
 
     const renderSecondField = () => {
         switch(colorOption) {
-            case 'existing': return <Field name='color' component={renderSelect} change={props.change} colors={props.colors} val={selectedColorDropdown} setter={setSelectedColorDropdown} />
+            case 'existing': return <Field name='color' component={ColorSelector} change={props.change} colors={props.colors} val={selectedColorDropdown} setter={(v) => {setSelectedColorDropdown(v); props.change('color', v)}} defaultText="Válassz egy színt" firstDisabled={true} />
             case 'new': return <Field name="color" component={renderColorPicker} change={props.change} type="color" val={selectedColorPicker} setter={setSelectedColorPicker} />
             default: return
         }

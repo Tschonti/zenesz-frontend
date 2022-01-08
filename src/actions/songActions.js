@@ -4,7 +4,7 @@ import {
     CREATE_SONG,
     EDIT_SONG,
     DELETE_SONG,
-    CLEAR_PLAYLIST,
+    REMOVE_FROM_PLAYLIST,
     UPDATE_WITH_ID,
     UPDATE_WITH_WRONG_ID,
     UPDATE_WITH_TERM,
@@ -114,7 +114,7 @@ export const deleteSong = (id) => async (dispatch, getState) => {
         await db.delete(`/songs/${id}/`,
             { headers: {'Authorization': `Token ${getState().auth.token}` }})
         if (getState().playlist.list.includes(parseInt(id))) {
-            dispatch({type: CLEAR_PLAYLIST})
+            dispatch({ type: REMOVE_FROM_PLAYLIST, payload: parseInt(id) })
         }
         dispatch({type: DELETE_SONG, payload: id})
         history.push('/zenesz/')

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
+import ColorSelector from './ColorSelector'
+
 const SearchBar = props => {
     const [value, setValue] = useState('')
     const [debouncedValue, setDebouncedValue] = useState('')
@@ -46,19 +48,6 @@ const SearchBar = props => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chosenColor])
 
-    const renderOptions = colors => {
-        if (!colors) {
-            return
-        }
-        return (
-            colors.map(color => (
-                <option key={color} value={color} style={{color: '#' + color}}>
-                    {'#' + color}
-                </option>
-            ))
-        )
-    }
-
     const cancelSearch = () => {
         setValue('')
         setLyricsToo(false)
@@ -80,10 +69,7 @@ const SearchBar = props => {
                     </div>
                 </div>
                 <div className="three wide field">
-                    <select className="ui dropdown" name="color" value={chosenColor} onChange={(e) => setChosenColor(e.target.value)} style={{color: chosenColor ? '#' + chosenColor : 'black'}}>
-                        <option selected value=""style={{color: 'black'}}>Minden dal</option>
-                        {renderOptions(props.colors)}
-                    </select>
+                    <ColorSelector val={chosenColor} setter={setChosenColor} defaultText="Minden dal" colors={props.colors} firstDisabled={false} />
                     <i data-tip="Keresés elvetése" className="icon bigger-icon times circle gray pointer" onClick={cancelSearch}></i>
                 </div>
 
