@@ -1,0 +1,9 @@
+---
+deployment:
+  tasks:
+    - export DEPLOYPATH=/home/okgyhuxe/public_html/zenesz
+    - /bin/cp -R build/static $DEPLOYPATH
+    - /bin/cp build/.htaccess $DEPLOYPATH
+    - /bin/cp build/asset-manifest.json $DEPLOYPATH
+    - /bin/cp build/favicon.ico $DEPLOYPATH
+    - /bin/cp build/index.html $DEPLOYPATH
