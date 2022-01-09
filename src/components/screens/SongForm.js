@@ -83,7 +83,7 @@ const SongForm = props => {
 
     const renderSecondField = () => {
         switch(colorOption) {
-            case 'existing': return <Field name='color' component={ColorSelector} change={props.change} colors={props.colors} val={selectedColorDropdown} setter={(v) => {setSelectedColorDropdown(v); props.change('color', '#' + v)}} defaultText="Válassz egy színt" firstDisabled={true} />
+            case 'existing': return <Field name='color' component={ColorSelector} colors={props.colors} val={selectedColorDropdown} setter={(v) => {setSelectedColorDropdown(v); props.change('color', '#' + v)}} defaultText="Válassz egy színt" firstDisabled={true} />
             case 'new': return <Field name="color" component={renderColorPicker} change={props.change} type="color" val={selectedColorPicker} setter={setSelectedColorPicker} />
             default: return
         }
@@ -91,7 +91,7 @@ const SongForm = props => {
 
     const changeColorOption = opt => {
         switch(opt) {
-            case 'existing': props.change('color', selectedColorDropdown); break
+            case 'existing': props.change('color', '#' + selectedColorDropdown); break
             case 'new': props.change('color', selectedColorPicker); break
             default: props.change('color', '')
         }
