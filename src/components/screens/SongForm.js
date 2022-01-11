@@ -78,8 +78,8 @@ const SongForm = props => {
         )
     }
     const [colorOption, setColorOption] = useState(props.initialValues.color ? 'existing' : 'none')
-    const [selectedColorDropdown, setSelectedColorDropdown] = useState(props.initialValues.color ? props.initialValues.color : '')
-    const [selectedColorPicker, setSelectedColorPicker] = useState(props.initialValues.color ? '#' + props.initialValues.color : '')
+    const [selectedColorDropdown, setSelectedColorDropdown] = useState(props.initialValues.color ? props.initialValues.color.slice(1) : '')
+    const [selectedColorPicker, setSelectedColorPicker] = useState(props.initialValues.color ? props.initialValues.color : '')
 
     const renderSecondField = () => {
         switch(colorOption) {
