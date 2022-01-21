@@ -148,6 +148,10 @@
     background-color: #fbfba5;
 }
 
+.notLinkStyle, .notLinkStyle:hover {
+    color: #000000de;
+}
+
 .playlist-container {
     position: fixed;
     bottom: 0;

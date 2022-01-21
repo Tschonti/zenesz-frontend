@@ -2,9 +2,9 @@ import React from 'react'
 import { connect }  from 'react-redux'
 import _ from 'lodash'
 import { isMobileOnly } from 'react-device-detect'
+import { Link } from 'react-router-dom'
 
 import '../../styles.css'
-import history from '../../history'
 import { sortSongs, onlyUnique } from '../../util'
 
 import MyTooltip from '../MyTooltip'
@@ -47,21 +47,31 @@ class SongList extends React.Component {
         if (this.props.plVisible || isMobileOnly) {
             return (
                 <div className="right-left">
-                    <i data-tip="Hozzáadás a lejátszási listához" className="icon bigger-icon plus circle green" onClick={(e) => this.addToPlaylist(e, song.id)}></i>&nbsp;&nbsp;
-                    <i data-tip="Eltávolítás a lejátszási listáról" className="icon bigger-icon minus circle red" onClick={(e) => this.removeFromPlaylist(e, song.id)}></i>
+                    <i 
+                        data-tip="Hozzáadás a lejátszási listához" 
+                        className="icon bigger-icon plus circle green" 
+                        onClick={(e) => {e.preventDefault();this.addToPlaylist(e, song.id)}}>
+                    </i>&nbsp;&nbsp;
+                    <i 
+                        data-tip="Eltávolítás a lejátszási listáról" 
+                        className="icon bigger-icon minus circle red" 
+                        onClick={(e) => {e.preventDefault();this.removeFromPlaylist(e, song.id)}}>
+                    </i>
                 </div>
             )
         }
     }
 
     renderSong = (song, idx) => (
-        <div style={{ backgroundColor: '#' + song.color }} className={`column pointer hover-grey my-bottom-border ${idx % 3 !== 0 && !isMobileOnly ? 'left-border' : ''}`} key={song.id} onClick={() => history.push(`/zenesz/songs/${song.id}`)}>
-            <div className="content right-left">
-                <div className='next-to'>
-                    <h3 className="header my-header-text">{song.id}. {song.title}</h3>
+        <div style={{ backgroundColor: '#' + song.color }} className={`column pointer hover-grey my-bottom-border ${idx % 3 !== 0 && !isMobileOnly ? 'left-border' : ''}`} key={song.id} >
+            <Link to={`/zenesz/songs/${song.id}`} className="notLinkStyle">
+                <div className="content right-left">
+                    <div className='next-to'>
+                        <h3 className="header my-header-text">{song.id}. {song.title}</h3>
+                    </div>
+                    {this.renderSmallButtons(song)}
                 </div>
-                {this.renderSmallButtons(song)}
-            </div>
+            </Link>
         </div>
     )
 
