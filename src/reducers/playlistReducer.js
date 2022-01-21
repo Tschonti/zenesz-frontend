@@ -25,7 +25,7 @@ export default (state = defaultState, action) => {
                 return state
             }
             let curIdx = state.currentIndex
-            if (remIdx < curIdx || remIdx === state.list.length - 1) {
+            if ((remIdx < curIdx || remIdx === state.list.length - 1) && curIdx > 0) {
                 curIdx -= 1
             }
             const clonedState = [...state.list]

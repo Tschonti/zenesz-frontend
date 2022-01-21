@@ -35,10 +35,12 @@ class SongList extends React.Component {
     }
 
     addToPlaylist = (event, id) => {
+        event.preventDefault()
         this.props.addToPlaylist(id)
         event.stopPropagation()
     }
     removeFromPlaylist = (event, id) => {
+        event.preventDefault()
         this.props.removeFromPlaylist(id)
         event.stopPropagation()
     }
@@ -50,12 +52,12 @@ class SongList extends React.Component {
                     <i 
                         data-tip="Hozzáadás a lejátszási listához" 
                         className="icon bigger-icon plus circle green" 
-                        onClick={(e) => {e.preventDefault();this.addToPlaylist(e, song.id)}}>
+                        onClick={(e) => this.addToPlaylist(e, song.id)}>
                     </i>&nbsp;&nbsp;
                     <i 
                         data-tip="Eltávolítás a lejátszási listáról" 
                         className="icon bigger-icon minus circle red" 
-                        onClick={(e) => {e.preventDefault();this.removeFromPlaylist(e, song.id)}}>
+                        onClick={(e) => this.removeFromPlaylist(e, song.id)}>
                     </i>
                 </div>
             )
