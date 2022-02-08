@@ -1,4 +1,5 @@
 import React from 'react'
+import { connect }  from 'react-redux'
 import { Router, Route, Switch } from 'react-router-dom'
 
 import SongList from './screens/SongList'
@@ -6,15 +7,17 @@ import SongCreate from './screens/SongCreate'
 import SongEdit from './screens/SongEdit'
 import SongShow from './screens/SongShow'
 import Login from './screens/Login'
+import PlaylistList from './screens/PlaylistList'
 
 import Footer from './Footer'
 import Header from './Header'
 import Playlist from './Playlist'
 
 import history from '../history'
+import { loadPlaylist } from '../actions/playlistActions'
 
 
-const App = () => {
+const App = (props) => {
     return (
         <div>
             <Router history={history}>
@@ -25,6 +28,11 @@ const App = () => {
                     <Route path="/zenesz/songs/edit/:id" exact component={SongEdit} />
                     <Route path="/zenesz/songs/:id" exact component={SongShow} />
                     <Route path="/zenesz/login" exact component={Login} />
+                    <Route path="/zenesz/playlists" exact component={PlaylistList} />
+                    <Route path="/zenesz/playlists/:id" exact render={({match}) => {
+                        props.loadPlaylist(match.params.id, true)
+                        history.push('/zenesz/')
+                    }} />
                 </Switch>
                 <Footer />
                 <Playlist />
@@ -33,5 +41,4 @@ const App = () => {
     )
 }
 
-
-export default App
+export default connect(null, { loadPlaylist })(App)

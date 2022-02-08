@@ -1,20 +1,25 @@
 import React from 'react'
 import { connect }  from 'react-redux'
 import _ from 'lodash'
-import { Link } from 'react-router-dom'
 
 import { fetchSongs } from '../actions/songActions'
-import { playlistNext,
+import {
+    playlistNext,
     startPlaylist,
     clearPlaylist,
     removeFromPlaylist,
     toggleVisibility,
-    moveInPlaylist } from '../actions/playlistActions'
+    moveInPlaylist,
+    savePlaylist,
+    unloadPlaylist,
+} from '../actions/playlistActions'
+import { newAlert } from '../actions/alertActions'
 
 import MyButton from './MyButton'
 import MyTooltip from './MyTooltip'
 import MyModal from './MyModal'
-
+import PlaylistItem from './PlaylistItem'
+import PlaylistForm from './PlaylistForm'
 
 class Playlist extends React.Component {
     state = {
@@ -25,31 +30,13 @@ class Playlist extends React.Component {
         this.props.fetchSongs()
     }
 
-    renderSong = (song, idx) => {
-        const upDisabled = idx === 0
-        const downDisabled = idx === this.props.playlist.list.length - 1
-        return (
-            <div className={`item my-item ${this.props.playlist.currentIndex === idx ? 'active' : ''}`} key={idx}>
-                <h5 className="header">
-                    <i className={`${upDisabled ? 'grey' : 'pointer'} icon caret up bigger-icon`} onClick={() => this.props.moveInPlaylist(idx, true)}></i>
-                    <i className={`${downDisabled ? 'grey' : 'pointer'} icon caret down bigger-icon`} onClick={() => this.props.moveInPlaylist(idx, false)}></i>
-                    <Link to={`/zenesz/songs/${song.id}`} className="notLinkStyle pointer">{song.id}. {song.title}</Link>
-
-                    <div className="right floated">
-                        <i className="icon minus circle red pointer" onClick={() => this.props.removeFromPlaylist(song.id)}></i>
-                    </div>
-                </h5>
-            </div>
-        )
-    }
-
-    renderSongList = () => {
+    renderSongList = (modifiable) => {
         if (_.isEmpty(this.props.songs) || !this.state.open) {
             return null
         }
         const list = this.props.playlist.list.map((songId, idx) => {
             const song = this.props.songs.find(el => el.id === songId)
-            return song ? this.renderSong(song, idx) : null
+            return <PlaylistItem key={idx} song={song} idx={idx} length={this.props.playlist.list.length} currentIndex={this.props.playlist.currentIndex} unmodifiable={!modifiable} playlist />
         })
 
         const empty = list.length > 0 ? '' : (<p className="centered-text">A lejátszási lista üres</p>)
@@ -60,18 +47,17 @@ class Playlist extends React.Component {
                 </div>
                 {empty}
             </>
-
         )
-
-    }
-    onClear = () => {
-        this.props.clearPlaylist()
-        this.props.toggleVisibility()
     }
 
     onClose = (e) => {
         this.props.toggleVisibility()
         e.stopPropagation()
+    }
+
+    copyLink(id) {
+        navigator.clipboard.writeText(`https://okgy.hu/dicsi/playlists/${id}`)
+        this.props.newAlert('A lejátszási lista linkje a vágólapra másolva', 'success')
     }
 
     render() {
@@ -87,32 +73,46 @@ class Playlist extends React.Component {
                 <i className="red icon close" onClick={this.onClose}></i>
             </div>
         ) : null
+        const modifiable = !this.props.playlist.loaded || this.props.signedIn
         return (
             <>
                 <div className="playlist-container">
                     <MyTooltip />
                     <div className="right-left pointer" onClick={() => this.setState({open: !this.state.open})}>
-                        <h3>Lejátszási lista {`${currentIndex}/${this.props.playlist.list.length}`}</h3>
+                        <h3>{this.props.playlist.loaded ? this.props.playlist.loadedName : 'Lejátszási lista'} {`${currentIndex}/${this.props.playlist.list.length}`}</h3>
                         <div>
                             <i className={`icon ${this.state.open ? 'minus' : 'plus'}`}></i>&nbsp;&nbsp;
                             <i className="red icon close" onClick={this.onClose}></i>
                         </div>
                     </div>
                     <div className="centered-container">
-                        <MyModal
-                            header="Biztosan törlöd a lejátszási listát?"
-                            content={'Biztosan törlöd a lejátszási listát? Ezt később nem tudod visszavonni!'}
-                            closeText={'Mégse'}
-                            approveText={'Törlés'}
-                            onApprove={this.onClear}
-                        >
-                            <MyButton disabled={this.props.playlist.list.length === 0} tip="Lejátszási lista törlése" color="negative" icons={["trash alternate"]} />
-                        </MyModal>
+                    {this.props.signedIn && !this.props.playlist.loaded && (
+                            <PlaylistForm onSubmit={(formData) => this.props.savePlaylist(formData)} disabled={this.props.playlist.list.length === 0} />
+                        )}
+                        {this.props.playlist.loaded ? (
+                            <>
+                                <MyButton tip="Üres listára váltás" color="orange" onClick={this.props.unloadPlaylist} icons={["file outline"]} />
+                                <MyButton tip="Megosztás" color="purple" onClick={() => this.copyLink(this.props.playlist.loaded )} icons={["share alternate"]} />
+                            </>
+
+                        ) : (
+                            <MyModal
+                                header="Biztosan törlöd a lejátszási listát?"
+                                generateTrigger={() => <MyButton disabled={this.props.playlist.list.length === 0 && !this.props.playlist.loaded} tip="Lejátszási lista törlése" color="negative" icons={["trash alternate"]} />}
+                                closeText="Mégse"
+                                approveText="Törlés"
+                                onApprove={this.props.clearPlaylist}
+                                negative
+                                id={1}
+                            >
+                                Biztosan üríted a lejátszási listát? Ezt később nem tudod visszavonni!
+                            </MyModal>
+                        )}
                         <MyButton disabled={!this.props.playlist.active} tip="Előző ének" color="blue" onClick={() => this.props.playlistNext(false, this.props.playlist)} icons={["backward"]} />
                         <MyButton disabled={this.props.playlist.active || this.props.playlist.list.length === 0} tip="Lejátszási lista indítása" color="green" onClick={() => this.props.startPlaylist(this.props.playlist)} icons={["play"]} />
                         <MyButton disabled={!this.props.playlist.active} tip="Következő ének" color="blue" onClick={() => this.props.playlistNext(true, this.props.playlist)} icons={["forward"]} />
                     </div>
-                    {this.renderSongList()}
+                    {this.renderSongList(modifiable)}
                     {extraButtons}
                 </div>
             </>
@@ -124,7 +124,8 @@ class Playlist extends React.Component {
 const mapStateToProps = state => {
     return {
         songs: Object.values(state.songs),
-        playlist: state.playlist
+        playlist: state.playlist,
+        signedIn: state.auth.signedIn
     }
 }
 
@@ -135,5 +136,8 @@ export default connect(mapStateToProps, {
     clearPlaylist,
     removeFromPlaylist,
     toggleVisibility,
-    moveInPlaylist
+    moveInPlaylist,
+    savePlaylist,
+    unloadPlaylist,
+    newAlert,
 })(Playlist)

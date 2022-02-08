@@ -8,7 +8,8 @@ import { logout } from '../actions/authActions'
 const Footer = (props) => {
 
     const authLink = props.signedIn
-    ? <Link className="header-link" onClick={() => props.logout()}>Kijelentkezés</Link>
+    // eslint-disable-next-line
+    ? <a className="header-link pointer" onClick={() => props.logout()}>Kijelentkezés</a>
     : <Link to="/zenesz/login" className="header-link centered-text">Admin bejelentkezés</Link>
 
     return (

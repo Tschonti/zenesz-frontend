@@ -62,12 +62,12 @@ const SongForm = props => {
                     <div className="column jobbra">
                         <MyModal
                             header="Biztosan törlöd ezt az éneket?"
-                            content={`Biztosan törlöd a(z) ${props.initialValues.title} éneket? Ezt később nem tudod visszavonni!`}
+                            generateTrigger={() => <button type="button" className={`ui button negative ${isMobileOnly ? 'my-bigger-button' : ''}`}>Ének törlése</button>}
                             closeText="Mégse"
                             approveText="Törlés"
                             onApprove={props.onDeleteClick}
                         >
-                            <button type="button" className={`ui button negative ${isMobileOnly ? 'my-bigger-button' : ''}`}>Ének törlése</button>
+                            {`Biztosan törlöd a(z) ${props.initialValues.title} éneket? Ezt később nem tudod visszavonni!`}
                         </MyModal>
                     </div>
                 </div>

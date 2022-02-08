@@ -10,6 +10,14 @@
 
 .my-header {
     height: 52px;
+    width: 100%;
+}
+
+.my-mobile-header {
+    border-bottom-style: solid!important;
+    border-width: 1px!important;
+    border-color: lightgrey!important;
+    width: 100%!important;
 }
 
 .comment {
@@ -144,7 +152,7 @@
 .pl {
     padding-left: 10px;
 }
-.active {
+.activeInPlaylist {
     background-color: #fbfba5;
 }
 
@@ -238,4 +246,8 @@
 
 .bigger-icon {
     font-size: 1.4em!important;
+}
+
+.redBackground {
+    background-color: rgb(253, 141, 141);
 }

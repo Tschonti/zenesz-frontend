@@ -5,7 +5,7 @@ import { isMobileOnly } from 'react-device-detect'
 
 import '../../styles.css'
 
-import { fetchSong, deleteSong } from '../../actions/songActions'
+import { fetchSong } from '../../actions/songActions'
 import { addToPlaylist, toggleVisibility } from '../../actions/playlistActions'
 import { removeAlert } from '../../actions/alertActions'
 
@@ -34,7 +34,7 @@ class SongShow extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.song) {
+        if (prevProps.song && this.props.song) {
             if (prevProps.song.id !== this.props.song.id) {
                 this.setState({ currentVerse: 0})
             }
@@ -266,4 +266,4 @@ const mapStateToProps = (state, ownProps) => {
     }
 }
 
-export default connect(mapStateToProps, { fetchSong, deleteSong, removeAlert, addToPlaylist, toggleVisibility })(SongShow)
+export default connect(mapStateToProps, { fetchSong, removeAlert, addToPlaylist, toggleVisibility })(SongShow)

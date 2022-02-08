@@ -8,7 +8,8 @@ import {
     UPDATE_WITH_ID,
     UPDATE_WITH_WRONG_ID,
     UPDATE_WITH_TERM,
-    CANCEL_SEARCH } from './types'
+    CANCEL_SEARCH, 
+    CLOSE_MODAL} from './types'
 import { db } from '../api'
 import history from '../history'
 import { handleError } from '../util'
@@ -84,7 +85,7 @@ export const createSong = formData => async (dispatch, getState) => {
             lyrics: formData.lyrics.split('\n\n').join('###'),
             desc: formData.desc || '',
             color: color,
-        }, { headers: {'Authorization': `Token ${getState().auth.token}` }})
+        }, { headers: {'Authorization': `Token ${getState().auth.zeneszToken}` }})
         dispatch({type: CREATE_SONG, payload: response.data})
         history.push(`/zenesz/songs/${formData.id}`)
     } catch (err) {
@@ -101,7 +102,7 @@ export const editSong = (id, formData) => async (dispatch, getState) => {
             lyrics: formData.lyrics.split('\n\n').join('###'),
             desc: formData.desc || '',
             color: formData.color.slice(1)
-        }, { headers: {'Authorization': `Token ${getState().auth.token}` }})
+        }, { headers: {'Authorization': `Token ${getState().auth.zeneszToken}` }})
         dispatch({type: EDIT_SONG, payload: response.data})
         history.push(`/zenesz/songs/${id}`)
     } catch (err) {
@@ -112,11 +113,12 @@ export const editSong = (id, formData) => async (dispatch, getState) => {
 export const deleteSong = (id) => async (dispatch, getState) => {
     try {
         await db.delete(`/songs/${id}/`,
-            { headers: {'Authorization': `Token ${getState().auth.token}` }})
-        if (getState().playlist.list.includes(parseInt(id))) {
-            dispatch({ type: REMOVE_FROM_PLAYLIST, payload: parseInt(id) })
+            { headers: {'Authorization': `Token ${getState().auth.zeneszToken}` }})
+        if (getState().playlist.list.includes(id)) {
+            dispatch({ type: REMOVE_FROM_PLAYLIST, payload: id })
         }
         dispatch({type: DELETE_SONG, payload: id})
+        dispatch({type: CLOSE_MODAL})
         history.push('/zenesz/')
     } catch(err) {
         handleError(err, dispatch)

@@ -33,3 +33,48 @@ export const sortSongs = (songs, field) => {
 export const onlyUnique = (value, index, self) => {
     return self.indexOf(value) === index && value
 }
+
+export const addToPlaylistReducer = (playlist, newSongId) => {
+    return { ...playlist, list: [ ...playlist.list, newSongId]}
+}
+
+export const removeFromPlaylistReducer = (playlist, idToRemove) => {
+    const remIdx = playlist.list.indexOf(idToRemove)
+    if (remIdx === -1) {
+        return playlist
+    }
+    let curIdx = playlist.currentIndex
+    if ((remIdx < curIdx || remIdx === playlist.list.length - 1) && curIdx > 0) {
+        curIdx -= 1
+    }
+    const clonedState = [...playlist.list]
+    clonedState.splice(remIdx, 1)
+    return { ...playlist, list: clonedState, currentIndex: curIdx }
+}
+
+export const moveInPlaylistReducer = (playlist, up, index) => {
+    if ((index === 0 && up) || (index === playlist.list.length - 1 && !up)) {
+        return playlist
+    }
+    const otherIndex = up ? index - 1 : index + 1
+    const clonedState = {...playlist}
+    const temp = clonedState.list[otherIndex]
+    clonedState.list[otherIndex] = clonedState.list[index]
+    clonedState.list[index] = temp
+    let diff = 0
+    if (playlist.currentIndex === index) {
+        diff = up ? -1 : 1
+    } else if (playlist.currentIndex === otherIndex) {
+        diff = up ? 1 : -1
+    }
+    clonedState.currentIndex += diff
+    return clonedState
+}
+
+export const addPlacesToPlaylist = (playlist) => {
+    return playlist.map((song, idx) => ({song: song, place: idx}))
+}
+
+export const removePlacesFromPlaylist = (playlist) => {
+    return playlist.sort((a, b) => a.place - b.place).map(song => song.song)
+}
