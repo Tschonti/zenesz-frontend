@@ -8,6 +8,7 @@ import { fetchSongs } from '../../actions/songActions'
 import { fetchPlaylists, loadPlaylist, clearPlaylist } from '../../actions/playlistActions'
 import MyLoader from '../MyLoader'
 import MyTooltip from '../MyTooltip'
+import Page from '../Page'
 import MyModal from '../MyModal'
 import PlaylistItem from '../PlaylistItem'
 import MyButton from '../MyButton'
@@ -41,56 +42,58 @@ class PlaylistList extends React.Component {
     render() {
         if (this.props.playlistList.loaded) {
             return (
-                <div className="ui container">
-                    <MyTooltip />
-                    <h2>Lejátszási listák</h2>
-                    {(this.props.playlistList.list && this.props.playlistList.list.length > 0 && !_.isEmpty(this.props.songs)) ? (
-                    <Accordion fluid styled>
-                        {this.props.playlistList.list.map(playlist => (
-                            <div key={playlist.id}>
-                                <Accordion.Title
-                                    active={this.state.activePlaylist === playlist.id}
-                                    onClick={() => this.handleClick(playlist.id)}
-                                >
-                                    <div className='right-left'>
-                                        <h3>
-                                            <Icon name='dropdown' />
-                                            {playlist.name}
-                                        </h3>
-                                        { !isMobileOnly && this.generateDateAdded(playlist.created_at) }
-                                    </div>
-                                </Accordion.Title>
-                                <Accordion.Content active={this.state.activePlaylist === playlist.id}>
-                                    { isMobileOnly && this.generateDateAdded(playlist.created_at) }
-                                    <MyButton tip="Betöltés" color="green" onClick={() => this.props.loadPlaylist(playlist.id, true)} icons={["play circle"]} />
-                                    <MyButton tip="Megosztás" color="purple" onClick={() => this.copyLink(playlist.id)} icons={["share alternate"]} />
-                                    <MyButton tip="Duplikálás" color="blue" onClick={() => this.props.loadPlaylist(playlist.id, false)} icons={["copy"]} />
-                                    {this.props.signedIn && (
-                                        <MyModal
-                                            header="Biztosan törlöd a lejátszási listát?"
-                                            generateTrigger={() => <MyButton tip="Törlés" color="red" icons={["trash alternate"]} />}
-                                            closeText="Mégse"
-                                            approveText="Törlés"
-                                            onApprove={() => this.props.clearPlaylist(playlist.id)}
-                                            negative
-                                            id={playlist.id}
-                                        >
-                                            Biztosan törlöd a lejátszási listát az adatbázisból? Ezt később nem tudod visszavonni! 
-                                        </MyModal>
-                                    )}
-                                    <div className="ui relaxed divided ordered list">
-                                        {playlist.songs.length > 0 ? playlist.songs.map((songId, idx) => (
-                                            <PlaylistItem key={idx} song={this.props.songs[songId]} idx={idx} length={playlist.songs.length} unmodifiable={!this.props.signedIn} playlistId={playlist.id} />
-                                        )) : <p className="centered-text">A lejátszási lista üres</p>}
-                                    </div>
-                                </Accordion.Content>
-                            </div>
-                        ))}
-                    </Accordion>
-                    ) : (
-                        <p className="big-text centered-text">Nincs találat!</p>
-                    )}
-                </div>
+                <Page path={this.props.location.pathname}>
+                    <div className="ui container">
+                        <MyTooltip />
+                        <h2>Lejátszási listák</h2>
+                        {(this.props.playlistList.list && this.props.playlistList.list.length > 0 && !_.isEmpty(this.props.songs)) ? (
+                        <Accordion fluid styled>
+                            {this.props.playlistList.list.map(playlist => (
+                                <div key={playlist.id}>
+                                    <Accordion.Title
+                                        active={this.state.activePlaylist === playlist.id}
+                                        onClick={() => this.handleClick(playlist.id)}
+                                    >
+                                        <div className='right-left'>
+                                            <h3>
+                                                <Icon name='dropdown' />
+                                                {playlist.name}
+                                            </h3>
+                                            { !isMobileOnly && this.generateDateAdded(playlist.created_at) }
+                                        </div>
+                                    </Accordion.Title>
+                                    <Accordion.Content active={this.state.activePlaylist === playlist.id}>
+                                        { isMobileOnly && this.generateDateAdded(playlist.created_at) }
+                                        <MyButton tip="Betöltés" color="green" onClick={() => this.props.loadPlaylist(playlist.id, true)} icons={["play circle"]} />
+                                        <MyButton tip="Megosztás" color="purple" onClick={() => this.copyLink(playlist.id)} icons={["share alternate"]} />
+                                        <MyButton tip="Duplikálás" color="blue" onClick={() => this.props.loadPlaylist(playlist.id, false)} icons={["copy"]} />
+                                        {this.props.signedIn && (
+                                            <MyModal
+                                                header="Biztosan törlöd a lejátszási listát?"
+                                                generateTrigger={() => <MyButton tip="Törlés" color="red" icons={["trash alternate"]} />}
+                                                closeText="Mégse"
+                                                approveText="Törlés"
+                                                onApprove={() => this.props.clearPlaylist(playlist.id)}
+                                                negative
+                                                id={playlist.id}
+                                            >
+                                                Biztosan törlöd a lejátszási listát az adatbázisból? Ezt később nem tudod visszavonni! 
+                                            </MyModal>
+                                        )}
+                                        <div className="ui relaxed divided ordered list">
+                                            {playlist.songs.length > 0 ? playlist.songs.map((songId, idx) => (
+                                                <PlaylistItem key={idx} song={this.props.songs[songId]} idx={idx} length={playlist.songs.length} unmodifiable={!this.props.signedIn} playlistId={playlist.id} />
+                                            )) : <p className="centered-text">A lejátszási lista üres</p>}
+                                        </div>
+                                    </Accordion.Content>
+                                </div>
+                            ))}
+                        </Accordion>
+                        ) : (
+                            <p className="big-text centered-text">Nincs találat!</p>
+                        )}
+                    </div>
+                </Page>
             )
         }
         return <MyLoader />

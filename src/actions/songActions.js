@@ -114,7 +114,7 @@ export const deleteSong = (id) => async (dispatch, getState) => {
     try {
         await db.delete(`/songs/${id}/`,
             { headers: {'Authorization': `Token ${getState().auth.zeneszToken}` }})
-        if (getState().playlist.list.includes(id)) {
+        if (getState().playlist.songs.includes(id)) {
             dispatch({ type: REMOVE_FROM_PLAYLIST, payload: id })
         }
         dispatch({type: DELETE_SONG, payload: id})

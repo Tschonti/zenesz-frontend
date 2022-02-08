@@ -11,6 +11,7 @@ import { removeAlert } from '../../actions/alertActions'
 
 import MyLoader from '../MyLoader'
 import MyButton from '../MyButton'
+import Page from '../Page'
 import MyTooltip from '../MyTooltip'
 
 const SMALL_FONT_SIZE = 18
@@ -244,14 +245,14 @@ class SongShow extends React.Component {
     render() {
         if (this.props.song) {
             return (
-                <>
+                <Page path={this.props.location.pathname}>
                     <MyTooltip />
                     <div className="ui container" onKeyDown={this.handleKeyDown}>
                             {this.renderTitle()}
                             {this.renderVerses()}
                             {this.renderDesc()}
                     </div>
-                </>
+                </Page>
             )
         }
         return <MyLoader />

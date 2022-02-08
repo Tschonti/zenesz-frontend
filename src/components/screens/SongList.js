@@ -8,6 +8,7 @@ import '../../styles.css'
 import { sortSongs, onlyUnique } from '../../util'
 
 import MyTooltip from '../MyTooltip'
+import Page from '../Page'
 import MyLoader from '../MyLoader'
 import SearchBar from '../SearchBar'
 import MyButton from '../MyButton'
@@ -100,25 +101,27 @@ class SongList extends React.Component {
 
         const empty = songs.length === 0 ? <p className="big-text centered-text">Nincs találat!</p> : null
         return (
-            <div className="ui container">
-                <MyTooltip />
-                <div className={`ui ${isMobileOnly ? '' : 'stackable grid'}`}>
-                    <div className="twelve wide column">
-                        <SearchBar id={this.props.findId} term={this.props.searchSongs} cancel={this.props.cancelSearch} colors={this.state.colors}/>
-                    </div>
-                    <div className="four wide column ">
-                        <div className="centered-container">
-                            <MyButton color="blue" onClick={() => this.setState({ sortById: true})} icons={["sort numeric down"]} tip="Énekek rendezése sorszám szerint" disabled={this.state.sortById || this.props.searchList.validSearch}/>
-                            <MyButton color="blue" onClick={() => this.setState({ sortById: false})} icons={["sort alphabet down"]} tip="Énekek rendezése cím szerint" disabled={!this.state.sortById || this.props.searchList.validSearch}/>
-                            <MyButton color="green" onClick={this.props.toggleVisibility} icons={["play circle"]} text=" Lejátszási lista"/>
+            <Page path={this.props.location.pathname}>
+                <div className="ui container">
+                    <MyTooltip />
+                    <div className={`ui ${isMobileOnly ? '' : 'stackable grid'}`}>
+                        <div className="twelve wide column">
+                            <SearchBar id={this.props.findId} term={this.props.searchSongs} cancel={this.props.cancelSearch} colors={this.state.colors}/>
+                        </div>
+                        <div className="four wide column ">
+                            <div className="centered-container">
+                                <MyButton color="blue" onClick={() => this.setState({ sortById: true})} icons={["sort numeric down"]} tip="Énekek rendezése sorszám szerint" disabled={this.state.sortById || this.props.searchList.validSearch}/>
+                                <MyButton color="blue" onClick={() => this.setState({ sortById: false})} icons={["sort alphabet down"]} tip="Énekek rendezése cím szerint" disabled={!this.state.sortById || this.props.searchList.validSearch}/>
+                                <MyButton color="green" onClick={this.props.toggleVisibility} icons={["play circle"]} text=" Lejátszási lista"/>
+                            </div>
                         </div>
                     </div>
+                    <div className="ui stackable three column grid">
+                        {songs}
+                    </div>
+                    {empty}
                 </div>
-                <div className="ui stackable three column grid">
-                    {songs}
-                </div>
-                {empty}
-            </div>
+            </Page>
         )
     }
 
