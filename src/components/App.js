@@ -22,9 +22,10 @@ import { loginFromCookie } from '../actions/authActions'
 class App extends React.Component {
     componentDidMount() {
         const c = new Cookies()
-        const tokenCookie = c.get('token')
-        if (tokenCookie) {
-            this.props.loginFromCookie(tokenCookie)
+        const dicsiCookie = c.get('dicsiToken')
+        const zeneszCookie = c.get('zeneszToken')
+        if (dicsiCookie && zeneszCookie) {
+            this.props.loginFromCookie(dicsiCookie, zeneszCookie)
         }
         this.props.recoverState()
     }

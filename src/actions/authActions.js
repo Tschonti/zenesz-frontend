@@ -23,8 +23,8 @@ export const login = ({ username, password }) => async dispatch => {
     }
 }
 
-export const loginFromCookie = token => {
-    return { type: LOGIN, payload: token }
+export const loginFromCookie = (dicsiToken, zeneszToken) => {
+    return { type: LOGIN, payload: {dicsi: dicsiToken, zenesz: zeneszToken } }
 }
 
 export const logout = () => {
