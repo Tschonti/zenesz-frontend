@@ -34,7 +34,7 @@ const PlaylistForm = props => {
     return (
         <MyModal
             header="Lejátszási lista mentése"
-            generateTrigger={() => <MyButton disabled={props.disabled} tip="Lejátszási lista mentése" color="primary" icons={["save"]} />}
+            generateTrigger={() => <MyButton disabled={props.disabled} tip="Lejátszási lista mentése" color="purple" icons={["save"]} />}
             closeText={'Mégse'}
             approveText={'Mentés'}
             onApprove={props.handleSubmit(onSubmit)}
