@@ -14,31 +14,37 @@ import Header from './Header'
 import Playlist from './Playlist'
 
 import history from '../history'
-import { loadPlaylist } from '../actions/playlistActions'
+import { loadPlaylist, recoverState} from '../actions/playlistActions'
 
 
-const App = (props) => {
-    return (
-        <div>
-            <Router history={history}>
-                <Header />
-                <Switch>
-                    <Route path="/zenesz/" exact component={SongList} />
-                    <Route path="/zenesz/songs/new" exact component={SongCreate} />
-                    <Route path="/zenesz/songs/edit/:id" exact component={SongEdit} />
-                    <Route path="/zenesz/songs/:id" exact component={SongShow} />
-                    <Route path="/zenesz/login" exact component={Login} />
-                    <Route path="/zenesz/playlists" exact component={PlaylistList} />
-                    <Route path="/zenesz/playlists/:id" exact render={({match}) => {
-                        props.loadPlaylist(match.params.id, true)
-                        history.push('/zenesz/')
-                    }} />
-                </Switch>
-                <Footer />
-                <Playlist />
-            </Router>
-        </div>
-    )
+class App extends React.Component {
+    componentDidMount() {
+        this.props.recoverState()
+    }
+
+    render() {
+        return (
+            <div>
+                <Router history={history}>
+                    <Header />
+                    <Switch>
+                        <Route path="/zenesz/" exact component={SongList} />
+                        <Route path="/zenesz/songs/new" exact component={SongCreate} />
+                        <Route path="/zenesz/songs/edit/:id" exact component={SongEdit} />
+                        <Route path="/zenesz/songs/:id" exact component={SongShow} />
+                        <Route path="/zenesz/login" exact component={Login} />
+                        <Route path="/zenesz/playlists" exact component={PlaylistList} />
+                        <Route path="/zenesz/playlists/:id" exact render={({match}) => {
+                            this.props.loadPlaylist(match.params.id, true)
+                            history.push('/zenesz/')
+                        }} />
+                    </Switch>
+                    <Footer />
+                    <Playlist />
+                </Router>
+            </div>
+        )
+    }
 }
 
-export default connect(null, { loadPlaylist })(App)
+export default connect(null, { loadPlaylist, recoverState })(App)

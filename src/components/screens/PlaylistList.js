@@ -80,7 +80,7 @@ class PlaylistList extends React.Component {
                                     )}
                                     <div className="ui relaxed divided ordered list">
                                         {playlist.songs.length > 0 ? playlist.songs.map((songId, idx) => (
-                                            <PlaylistItem key={idx} song={this.props.songs[songId]} idx={idx} length={playlist.songs.length} unmodifiable={!this.props.signedIn} />
+                                            <PlaylistItem key={idx} song={this.props.songs[songId]} idx={idx} length={playlist.songs.length} unmodifiable={!this.props.signedIn} playlistId={playlist.id} />
                                         )) : <p className="centered-text">A lejátszási lista üres</p>}
                                     </div>
                                 </Accordion.Content>

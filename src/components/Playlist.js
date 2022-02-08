@@ -31,12 +31,12 @@ class Playlist extends React.Component {
     }
 
     renderSongList = (modifiable) => {
-        if (_.isEmpty(this.props.songs) || !this.state.open) {
+        if (_.isEmpty(this.props.songs) || !this.state.open || !this.props.playlist.songs) {
             return null
         }
-        const list = this.props.playlist.list.map((songId, idx) => {
+        const list = this.props.playlist.songs.map((songId, idx) => {
             const song = this.props.songs.find(el => el.id === songId)
-            return <PlaylistItem key={idx} song={song} idx={idx} length={this.props.playlist.list.length} currentIndex={this.props.playlist.currentIndex} unmodifiable={!modifiable} playlist />
+            return <PlaylistItem key={idx} song={song} idx={idx} length={this.props.playlist.songs.length} currentIndex={this.props.playlist.currentIndex} unmodifiable={!modifiable} playlist playlistId={this.props.playlist.loaded} />
         })
 
         const empty = list.length > 0 ? '' : (<p className="centered-text">A lejátszási lista üres</p>)
@@ -62,11 +62,11 @@ class Playlist extends React.Component {
 
     render() {
         //TODO dupla tool-tip
-        if (!this.props.playlist.visible) {
+        if (!this.props.playlist.visible || !this.props.playlist.songs) {
             return null
         }
 
-        const currentIndex = this.props.playlist.list.length === 0 ? 0 : this.props.playlist.currentIndex + 1
+        const currentIndex = this.props.playlist.songs.length === 0 ? 0 : this.props.playlist.currentIndex + 1
         const extraButtons = this.state.open ? (
             <div className="right-left pointer" onClick={() => this.setState({open: !this.state.open})}>
                 <i className={`icon ${this.state.open ? 'minus' : 'plus'}`}></i>
@@ -79,7 +79,7 @@ class Playlist extends React.Component {
                 <div className="playlist-container">
                     <MyTooltip />
                     <div className="right-left pointer" onClick={() => this.setState({open: !this.state.open})}>
-                        <h3>{this.props.playlist.loaded ? this.props.playlist.loadedName : 'Lejátszási lista'} {`${currentIndex}/${this.props.playlist.list.length}`}</h3>
+                        <h3>{this.props.playlist.loaded ? this.props.playlist.loadedName : 'Lejátszási lista'} {`${currentIndex}/${this.props.playlist.songs.length}`}</h3>
                         <div>
                             <i className={`icon ${this.state.open ? 'minus' : 'plus'}`}></i>&nbsp;&nbsp;
                             <i className="red icon close" onClick={this.onClose}></i>
@@ -87,7 +87,7 @@ class Playlist extends React.Component {
                     </div>
                     <div className="centered-container">
                     {this.props.signedIn && !this.props.playlist.loaded && (
-                            <PlaylistForm onSubmit={(formData) => this.props.savePlaylist(formData)} disabled={this.props.playlist.list.length === 0} />
+                            <PlaylistForm onSubmit={(formData) => this.props.savePlaylist(formData)} disabled={this.props.playlist.songs.length === 0} />
                         )}
                         {this.props.playlist.loaded ? (
                             <>
@@ -98,7 +98,7 @@ class Playlist extends React.Component {
                         ) : (
                             <MyModal
                                 header="Biztosan törlöd a lejátszási listát?"
-                                generateTrigger={() => <MyButton disabled={this.props.playlist.list.length === 0 && !this.props.playlist.loaded} tip="Lejátszási lista törlése" color="negative" icons={["trash alternate"]} />}
+                                generateTrigger={() => <MyButton disabled={this.props.playlist.songs.length === 0 && !this.props.playlist.loaded} tip="Lejátszási lista törlése" color="negative" icons={["trash alternate"]} />}
                                 closeText="Mégse"
                                 approveText="Törlés"
                                 onApprove={this.props.clearPlaylist}
@@ -109,7 +109,7 @@ class Playlist extends React.Component {
                             </MyModal>
                         )}
                         <MyButton disabled={!this.props.playlist.active} tip="Előző ének" color="blue" onClick={() => this.props.playlistNext(false, this.props.playlist)} icons={["backward"]} />
-                        <MyButton disabled={this.props.playlist.active || this.props.playlist.list.length === 0} tip="Lejátszási lista indítása" color="green" onClick={() => this.props.startPlaylist(this.props.playlist)} icons={["play"]} />
+                        <MyButton disabled={this.props.playlist.active || this.props.playlist.songs.length === 0} tip="Lejátszási lista indítása" color="green" onClick={() => this.props.startPlaylist(this.props.playlist)} icons={["play"]} />
                         <MyButton disabled={!this.props.playlist.active} tip="Következő ének" color="blue" onClick={() => this.props.playlistNext(true, this.props.playlist)} icons={["forward"]} />
                     </div>
                     {this.renderSongList(modifiable)}

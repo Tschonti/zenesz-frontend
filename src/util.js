@@ -35,32 +35,36 @@ export const onlyUnique = (value, index, self) => {
 }
 
 export const addToPlaylistReducer = (playlist, newSongId) => {
-    return { ...playlist, list: [ ...playlist.list, newSongId]}
+    return { ...playlist, songs: [ ...playlist.songs, newSongId]}
 }
 
 export const removeFromPlaylistReducer = (playlist, idToRemove) => {
-    const remIdx = playlist.list.indexOf(idToRemove)
+    const remIdx = playlist.songs.indexOf(idToRemove)
     if (remIdx === -1) {
         return playlist
     }
     let curIdx = playlist.currentIndex
-    if ((remIdx < curIdx || remIdx === playlist.list.length - 1) && curIdx > 0) {
+    if ((remIdx < curIdx || remIdx === playlist.songs.length - 1) && curIdx > 0) {
         curIdx -= 1
     }
-    const clonedState = [...playlist.list]
+    const clonedState = [...playlist.songs]
     clonedState.splice(remIdx, 1)
-    return { ...playlist, list: clonedState, currentIndex: curIdx }
+    return { ...playlist, songs: clonedState, currentIndex: curIdx }
+}
+
+export const removeFromPlaylistReducerNoIndex = (playlist, idToRemove) => {
+    return { ...playlist, songs: playlist.songs.filter(songId => songId !== idToRemove)}
 }
 
 export const moveInPlaylistReducer = (playlist, up, index) => {
-    if ((index === 0 && up) || (index === playlist.list.length - 1 && !up)) {
+    if ((index === 0 && up) || (index === playlist.songs.length - 1 && !up)) {
         return playlist
     }
     const otherIndex = up ? index - 1 : index + 1
     const clonedState = {...playlist}
-    const temp = clonedState.list[otherIndex]
-    clonedState.list[otherIndex] = clonedState.list[index]
-    clonedState.list[index] = temp
+    const temp = clonedState.songs[otherIndex]
+    clonedState.songs[otherIndex] = clonedState.songs[index]
+    clonedState.songs[index] = temp
     let diff = 0
     if (playlist.currentIndex === index) {
         diff = up ? -1 : 1
@@ -68,6 +72,18 @@ export const moveInPlaylistReducer = (playlist, up, index) => {
         diff = up ? 1 : -1
     }
     clonedState.currentIndex += diff
+    return clonedState
+}
+
+export const moveInPlaylistReducerNoIndex = (playlist, up, index) => {
+    if ((index === 0 && up) || (index === playlist.songs.length - 1 && !up)) {
+        return playlist
+    }
+    const otherIndex = up ? index - 1 : index + 1
+    const clonedState = {...playlist}
+    const temp = clonedState.songs[otherIndex]
+    clonedState.songs[otherIndex] = clonedState.songs[index]
+    clonedState.songs[index] = temp
     return clonedState
 }
 

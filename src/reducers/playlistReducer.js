@@ -11,7 +11,8 @@ import {
     LOAD_PLAYLIST,
     UNLOAD_PLAYLIST,
     REPLACE_PLAYLIST,
-    PLAYLIST_STEP
+    PLAYLIST_STEP,
+    RECOVER_STATE,
 } from "../actions/types"
 import {
     addToPlaylistReducer,
@@ -20,7 +21,7 @@ import {
 } from "../util"
 
 const defaultState = {
-    list: [],
+    songs: [],
     currentIndex: 0,
     active: false,
     visible: false,
@@ -48,10 +49,10 @@ export default (state = defaultState, action) => {
         case MOVE_IN_PLAYLIST:
             return moveInPlaylistReducer(state, action.payload.up, action.payload.index)
         case SAVE_PLAYLIST:
-            return {...state, list: action.payload.songs, loaded: action.payload.id, loadedName: action.payload.name}
+            return {...state, songs: action.payload.songs, loaded: action.payload.id, loadedName: action.payload.name}
         case LOAD_PLAYLIST:
             return {
-                list: action.payload.list.songs,
+                songs: action.payload.list.songs,
                 currentIndex: 0,
                 active: false,
                 visible: true,
@@ -64,6 +65,11 @@ export default (state = defaultState, action) => {
             return action.payload
         case PLAYLIST_STEP:
             return { ...state, currentIndex: action.payload }
+        case RECOVER_STATE:
+            if (state.list && !state.songs) {
+                return {...state, songs: state.list}
+            }
+            return state
         default:
             return state
     }
