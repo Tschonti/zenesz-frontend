@@ -1,7 +1,7 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/okgyhuxe/public_html/zenesz
+    - export DEPLOYPATH=/home/okgyhuxe/public_html/zenesz-fe
     - /bin/rm -r $DEPLOYPATH/static/*
     - /bin/cp -R build/static $DEPLOYPATH
     - /bin/cp .htaccess $DEPLOYPATH
