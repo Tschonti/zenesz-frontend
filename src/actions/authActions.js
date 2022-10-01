@@ -1,11 +1,11 @@
 import { db, dicsiDb } from '../api'
 import history from '../history'
-import { handleError } from '../util'
+import { BASE_URL, handleError } from '../util'
 import { LOGIN, LOGOUT } from './types'
 import { Cookies } from 'react-cookie'
 
 const cookieOptions = {
-    path: '/zenesz',
+    path: BASE_URL,
     maxAge: 12*31*24*60*60
 }
 

@@ -1,9 +1,9 @@
 import axios from 'axios'
 
 export const db = axios.create({
-    baseURL: 'https://zenesz-api.herokuapp.com/'
+    baseURL: 'https://api.zenesz.okgy.hu/'
 })
 
 export const dicsiDb = axios.create({
-    baseURL: 'https://dicsi-api.herokuapp.com/'
+    baseURL: 'https://api.dicsi.okgy.hu/'
 })

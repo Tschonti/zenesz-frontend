@@ -94,3 +94,6 @@ export const addPlacesToPlaylist = (playlist) => {
 export const removePlacesFromPlaylist = (playlist) => {
     return playlist.sort((a, b) => a.place - b.place).map(song => song.song)
 }
+
+export const BASE_URL = ""
+export const FULL_URL = "https://zenesz.okgy.hu"

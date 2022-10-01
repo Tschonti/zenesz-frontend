@@ -8,11 +8,11 @@ import {
     UPDATE_WITH_ID,
     UPDATE_WITH_WRONG_ID,
     UPDATE_WITH_TERM,
-    CANCEL_SEARCH, 
+    CANCEL_SEARCH,
     CLOSE_MODAL} from './types'
 import { db } from '../api'
 import history from '../history'
-import { handleError } from '../util'
+import { BASE_URL, handleError } from '../util'
 
 export const fetchSongs = () => async dispatch => {
     try {
@@ -87,7 +87,7 @@ export const createSong = formData => async (dispatch, getState) => {
             color: color,
         }, { headers: {'Authorization': `Token ${getState().auth.zeneszToken}` }})
         dispatch({type: CREATE_SONG, payload: response.data})
-        history.push(`/zenesz/songs/${formData.id}`)
+        history.push(`${BASE_URL}/songs/${formData.id}`)
     } catch (err) {
         console.log(err.response)
         handleError(err, dispatch)
@@ -104,7 +104,7 @@ export const editSong = (id, formData) => async (dispatch, getState) => {
             color: formData.color.slice(1)
         }, { headers: {'Authorization': `Token ${getState().auth.zeneszToken}` }})
         dispatch({type: EDIT_SONG, payload: response.data})
-        history.push(`/zenesz/songs/${id}`)
+        history.push(`${BASE_URL}/songs/${id}`)
     } catch (err) {
         handleError(err, dispatch)
     }
@@ -119,7 +119,7 @@ export const deleteSong = (id) => async (dispatch, getState) => {
         }
         dispatch({type: DELETE_SONG, payload: id})
         dispatch({type: CLOSE_MODAL})
-        history.push('/zenesz/')
+        history.push(BASE_URL)
     } catch(err) {
         handleError(err, dispatch)
     }

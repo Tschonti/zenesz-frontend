@@ -4,13 +4,14 @@ import { connect } from 'react-redux'
 
 import '../styles.css'
 import { logout } from '../actions/authActions'
+import { BASE_URL } from '../util'
 
 const Footer = (props) => {
 
     const authLink = props.signedIn
     // eslint-disable-next-line
     ? <a className="header-link pointer" onClick={() => props.logout()}>Kijelentkezés</a>
-    : <Link to="/zenesz/login" className="header-link centered-text">Admin bejelentkezés</Link>
+    : <Link to={`${BASE_URL}/login`} className="header-link centered-text">Admin bejelentkezés</Link>
 
     return (
         <div className="footer-container centered-container two-column small-text">

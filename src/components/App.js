@@ -17,6 +17,7 @@ import Playlist from './Playlist'
 import history from '../history'
 import { loadPlaylist, recoverState} from '../actions/playlistActions'
 import { loginFromCookie } from '../actions/authActions'
+import { BASE_URL } from '../util'
 
 
 class App extends React.Component {
@@ -36,15 +37,15 @@ class App extends React.Component {
                 <Router history={history}>
                     <Header />
                     <Switch>
-                        <Route path="/zenesz/" exact component={SongList} />
-                        <Route path="/zenesz/songs/new" exact component={SongCreate} />
-                        <Route path="/zenesz/songs/edit/:id" exact component={SongEdit} />
-                        <Route path="/zenesz/songs/:id" exact component={SongShow} />
-                        <Route path="/zenesz/login" exact component={Login} />
-                        <Route path="/zenesz/playlists" exact component={PlaylistList} />
-                        <Route path="/zenesz/playlists/:id" exact render={({match}) => {
+                        <Route path={`${BASE_URL}/`} exact component={SongList} />
+                        <Route path={`${BASE_URL}/songs/new`} exact component={SongCreate} />
+                        <Route path={`${BASE_URL}/songs/edit/:id`} exact component={SongEdit} />
+                        <Route path={`${BASE_URL}/songs/:id`} exact component={SongShow} />
+                        <Route path={`${BASE_URL}/login`} exact component={Login} />
+                        <Route path={`${BASE_URL}/playlists`} exact component={PlaylistList} />
+                        <Route path={`${BASE_URL}/playlists/:id`} exact render={({match}) => {
                             this.props.loadPlaylist(match.params.id, true)
-                            history.push('/zenesz/')
+                            history.push(BASE_URL)
                         }} />
                     </Switch>
                     <Footer />

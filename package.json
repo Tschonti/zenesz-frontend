@@ -2,7 +2,7 @@
   "name": "zenesz-react",
   "version": "0.2.0",
   "private": true,
-  "homepage": "/zenesz",
+  "homepage": "/",
   "dependencies": {
     "@material-ui/core": "^4.12.2",
     "@material-ui/lab": "^4.0.0-alpha.60",

@@ -26,7 +26,8 @@ import {
     moveInPlaylistReducer,
     moveInPlaylistReducerNoIndex,
     removePlacesFromPlaylist,
-    addPlacesToPlaylist
+    addPlacesToPlaylist,
+    BASE_URL
 } from "../util"
 import { dicsiDb } from '../api'
 import { handleError } from '../util'
@@ -81,18 +82,18 @@ export const playlistNext = (next, state) => {
     }
     if (next) {
         if (state.currentIndex === state.songs.length - 1) {
-            history.push(`/zenesz/songs/${state.songs[0]}`)
+            history.push(`${BASE_URL}/songs/${state.songs[0]}`)
             return { type: PLAYLIST_NEXT, payload: 0 }
         } else {
-            history.push(`/zenesz/songs/${state.songs[state.currentIndex + 1]}`)
+            history.push(`${BASE_URL}/songs/${state.songs[state.currentIndex + 1]}`)
             return { type: PLAYLIST_NEXT, payload: state.currentIndex + 1 }
         }
     } else {
         if (state.currentIndex < 1) {
-            history.push(`/zenesz/songs/${state.songs[state.songs.length - 1]}`)
+            history.push(`${BASE_URL}/songs/${state.songs[state.songs.length - 1]}`)
             return { type: PLAYLIST_NEXT, payload: state.songs.length - 1 }
         } else {
-            history.push(`/zenesz/songs/${state.songs[state.currentIndex - 1]}`)
+            history.push(`${BASE_URL}/songs/${state.songs[state.currentIndex - 1]}`)
             return { type: PLAYLIST_NEXT, payload: state.currentIndex - 1 }
         }
     }
@@ -103,7 +104,7 @@ export const playlistStep = (idx) => {
 }
 
 export const startPlaylist = (state) => {
-    history.push(`/zenesz/songs/${state.songs[state.currentIndex]}`)
+    history.push(`${BASE_URL}/songs/${state.songs[state.currentIndex]}`)
     return {type: START_PLAYLIST}
 }
 export const stopPlaylist = () => {
@@ -126,7 +127,7 @@ export const clearPlaylist = (id) => async (dispatch, getState) => {
         } catch(err)  {
             handleError(err, dispatch)
         }
-    } 
+    }
 }
 
 export const toggleVisibility = () => {
