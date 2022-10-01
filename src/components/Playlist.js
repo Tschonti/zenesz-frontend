@@ -20,6 +20,7 @@ import MyTooltip from './MyTooltip'
 import MyModal from './MyModal'
 import PlaylistItem from './PlaylistItem'
 import PlaylistForm from './PlaylistForm'
+import { DICSI_FULL_URL } from '../util'
 
 class Playlist extends React.Component {
     state = {
@@ -56,7 +57,7 @@ class Playlist extends React.Component {
     }
 
     copyLink(id) {
-        navigator.clipboard.writeText(`https://okgy.hu/dicsi/playlists/${id}`)
+        navigator.clipboard.writeText(`${DICSI_FULL_URL}/playlists/${id}`)
         this.props.newAlert('A lejátszási lista linkje a vágólapra másolva', 'success')
     }
 

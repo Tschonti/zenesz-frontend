@@ -13,6 +13,7 @@ import MyModal from '../MyModal'
 import PlaylistItem from '../PlaylistItem'
 import MyButton from '../MyButton'
 import { newAlert } from '../../actions/alertActions'
+import { DICSI_FULL_URL } from '../../util'
 
 class PlaylistList extends React.Component {
     state = {
@@ -29,7 +30,7 @@ class PlaylistList extends React.Component {
     }
 
     copyLink(id) {
-        navigator.clipboard.writeText(`https://okgy.hu/dicsi/playlists/${id}`)
+        navigator.clipboard.writeText(`${DICSI_FULL_URL}/playlists/${id}`)
         this.props.newAlert('A lejátszási lista linkje a vágólapra másolva', 'success')
     }
 
@@ -77,7 +78,7 @@ class PlaylistList extends React.Component {
                                                 negative
                                                 id={playlist.id}
                                             >
-                                                Biztosan törlöd a lejátszási listát az adatbázisból? Ezt később nem tudod visszavonni! 
+                                                Biztosan törlöd a lejátszási listát az adatbázisból? Ezt később nem tudod visszavonni!
                                             </MyModal>
                                         )}
                                         <div className="ui relaxed divided ordered list">
