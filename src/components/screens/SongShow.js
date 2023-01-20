@@ -17,6 +17,7 @@ import { BASE_URL } from '../../util'
 
 const SMALL_FONT_SIZE = 18
 const BIG_FONT_SIZE = 60
+const NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'H']
 
 class SongShow extends React.Component {
     state = {
@@ -28,6 +29,7 @@ class SongShow extends React.Component {
         showButtons: !isMobileOnly,
         twoColumnMode: false,
         showDesc: false,
+        tuneOffset: 0,
     }
 
     componentDidMount() {
@@ -61,6 +63,10 @@ class SongShow extends React.Component {
         } else if (!increase && this.state.fontSize > 8) {
             this.setState({fontSize: this.state.fontSize - 3})
         }
+    }
+
+    onTune = (offset) => {
+        this.setState({ tuneOffset: (this.state.tuneOffset + offset) % NOTES.length})
     }
 
     onDescChange = () => {
@@ -104,7 +110,18 @@ class SongShow extends React.Component {
 
     renderLine = (line, idx) => {
         const numberOfSpaces = (line.match(/ {3}/g) || []).length
-        return <span className={`${numberOfSpaces > 0 ? 'blue' : ''}`} key={idx}>{line}<br/></span>
+        if (numberOfSpaces === 0) {
+            return <span key={idx}>{line}<br/></span>
+        }
+        let newLine = ''
+        for (let i = 0; i < line.length; i++) {
+            if (line[i] === line[i].toUpperCase() && isNaN(+line[i])) {
+                newLine = newLine + NOTES[(NOTES.indexOf(line[i]) + this.state.tuneOffset) % NOTES.length]
+            } else {
+                newLine = newLine + line[i]
+            }
+        }
+        return <span className="blue" key={idx}>{newLine}<br/></span>
     }
 
     renderVerse = (verse, idx) => {
@@ -182,6 +199,8 @@ class SongShow extends React.Component {
                 <MyButton tip="Betűméret csökkentése" color="primary" onClick={() => this.onSizeChange(false)} icons={["font", "arrow down" ]} />
                 <MyButton tip="Betűméret növelése" color="primary" onClick={() => this.onSizeChange(true)} icons={["font", "arrow up " ]} />
                 <MyButton tip="Betűméret visszaállítása" color="primary" onClick={this.handleFontSizeReset} icons={["font", "undo" ]} />
+                <MyButton tip="Lehangolás" color="orange" onClick={() => this.onTune(-1)} icons={["music note", "arrow down " ]} />
+                <MyButton tip="Felhangolás" color="orange" onClick={() => this.onTune(1)} icons={["music note", "arrow up " ]} />
                 <MyButton tip="Hozzáadás a lejátszási listához" color="green" onClick={this.onPlaylistAdd } icons={["plus" ]} />
                 <MyButton color="green" onClick={this.props.toggleVisibility} icons={["play circle"]} text=" Lejátszási lista"/>
             </>
