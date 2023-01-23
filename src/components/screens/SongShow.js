@@ -159,6 +159,17 @@ class SongShow extends React.Component {
         )
     }
 
+    renderTransposeButtons = () => (
+    <>
+        <div className="next-to">
+            <MyButton tip="Transzponálás -" color="orange" onClick={() => this.onTune(-1)} icons={["music note", "arrow down" ]} />
+            <MyButton tip="Transzponálás +" color="orange" onClick={() => this.onTune(1)} icons={["music note", "arrow up" ]} />
+            <MyButton tip="Transzponálás visszaállítása" color="orange" onClick={() => this.resetTune()} icons={["music note", "undo" ]} />
+        </div>
+        {this.state.tuneOffset !== 0 && <p>Transzponálás: {this.state.tuneOffset > NOTES.length / 2 ? -(NOTES.length - this.state.tuneOffset) : this.state.tuneOffset}</p>}
+    </>
+    )
+
     renderVerses = () => {
         if (!this.state.oneVerseModeActive) {
             if (this.state.twoColumnMode) {
@@ -186,11 +197,7 @@ class SongShow extends React.Component {
                                 {secondColumn}
                             </div>
                         </div>
-                        <div className="next-to">
-                            <MyButton tip="Transzponálás -" color="orange" onClick={() => this.onTune(-1)} icons={["music note", "arrow down" ]} />
-                            <MyButton tip="Transzponálás +" color="orange" onClick={() => this.onTune(1)} icons={["music note", "arrow up" ]} />
-                            <MyButton tip="Transzponálás visszaállítása" color="orange" onClick={() => this.resetTune()} icons={["music note", "undo" ]} />
-                        </div>
+                        {this.renderTransposeButtons()}
                     </>
 
                 )
@@ -201,11 +208,7 @@ class SongShow extends React.Component {
                             return this.renderVerse(verse, idx)
                         })}
                         </div>
-                        <div className="next-to">
-                            <MyButton tip="Transzponálás -" color="orange" onClick={() => this.onTune(-1)} icons={["music note", "arrow down" ]} />
-                            <MyButton tip="Transzponálás +" color="orange" onClick={() => this.onTune(1)} icons={["music note", "arrow up" ]} />
-                            <MyButton tip="Transzponálás visszaállítása" color="orange" onClick={() => this.resetTune()} icons={["music note", "undo" ]} />
-                        </div>
+                        {this.renderTransposeButtons()}
                     </>
 
                 )
@@ -285,7 +288,6 @@ class SongShow extends React.Component {
                         {this.renderButtons()}
                     </div>
                 </div>
-                {this.state.tuneOffset !== 0 && <p>Transzponálás: {this.state.tuneOffset > NOTES.length / 2 ? -(NOTES.length - this.state.tuneOffset) / 2 : this.state.tuneOffset / 2} hang</p>}
                 <div className="ui divider"></div>
             </>
 
