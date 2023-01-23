@@ -13,11 +13,11 @@ import MyLoader from '../MyLoader'
 import MyButton from '../MyButton'
 import Page from '../Page'
 import MyTooltip from '../MyTooltip'
-import { BASE_URL } from '../../util'
+import { BASE_URL, mod } from '../../util'
 
 const SMALL_FONT_SIZE = 18
 const BIG_FONT_SIZE = 60
-const NOTES = ['C', 'D', 'E', 'F', 'G', 'A', 'H']
+const NOTES = ['C', 'C#', 'D', 'Eb', 'E', 'F', 'F#', 'G', 'G#', 'A', 'Bb', 'H']
 
 class SongShow extends React.Component {
     state = {
@@ -66,7 +66,11 @@ class SongShow extends React.Component {
     }
 
     onTune = (offset) => {
-        this.setState({ tuneOffset: (this.state.tuneOffset + offset) % NOTES.length})
+        this.setState({ tuneOffset: mod((this.state.tuneOffset + offset), NOTES.length)})
+    }
+
+    resetTune = () => {
+        this.setState({ tuneOffset: 0 })
     }
 
     onDescChange = () => {
@@ -114,11 +118,30 @@ class SongShow extends React.Component {
             return <span key={idx}>{line}<br/></span>
         }
         let newLine = ''
-        for (let i = 0; i < line.length; i++) {
+        let i = 0
+        let skipSpace = false
+        while (i < line.length) {
             if (line[i] === line[i].toUpperCase() && isNaN(+line[i])) {
-                newLine = newLine + NOTES[(NOTES.indexOf(line[i]) + this.state.tuneOffset) % NOTES.length]
+                let note = line[i]
+                if (line[i + 1] === '#' || line[i + 1] === 'b') {
+                    note = line[i] + line[i + 1]
+                    i++
+                }
+                const newNote = NOTES[mod((NOTES.indexOf(note) + this.state.tuneOffset), NOTES.length)]
+                if (newNote.length > 1) {
+                    skipSpace = true
+                } else {
+                    skipSpace = false
+                }
+                newLine = newLine + newNote
+                i++
             } else {
-                newLine = newLine + line[i]
+                if (line[i] === ' ' && skipSpace){
+                    skipSpace = false
+                } else {
+                    newLine = newLine + line[i]
+                }
+                i++
             }
         }
         return <span className="blue" key={idx}>{newLine}<br/></span>
@@ -199,8 +222,9 @@ class SongShow extends React.Component {
                 <MyButton tip="Betűméret csökkentése" color="primary" onClick={() => this.onSizeChange(false)} icons={["font", "arrow down" ]} />
                 <MyButton tip="Betűméret növelése" color="primary" onClick={() => this.onSizeChange(true)} icons={["font", "arrow up " ]} />
                 <MyButton tip="Betűméret visszaállítása" color="primary" onClick={this.handleFontSizeReset} icons={["font", "undo" ]} />
-                <MyButton tip="Lehangolás" color="orange" onClick={() => this.onTune(-1)} icons={["music note", "arrow down " ]} />
-                <MyButton tip="Felhangolás" color="orange" onClick={() => this.onTune(1)} icons={["music note", "arrow up " ]} />
+                <MyButton tip="Letranszponálás" color="orange" onClick={() => this.onTune(-1)} icons={["music note", "arrow down" ]} />
+                <MyButton tip="Feltranszponálás" color="orange" onClick={() => this.onTune(1)} icons={["music note", "arrow up" ]} />
+                <MyButton tip="Transzponálás visszaállítása" color="orange" onClick={() => this.resetTune()} icons={["music note", "undo" ]} />
                 <MyButton tip="Hozzáadás a lejátszási listához" color="green" onClick={this.onPlaylistAdd } icons={["plus" ]} />
                 <MyButton color="green" onClick={this.props.toggleVisibility} icons={["play circle"]} text=" Lejátszási lista"/>
             </>
@@ -242,6 +266,7 @@ class SongShow extends React.Component {
                         {this.renderButtons()}
                     </div>
                 </div>
+                {this.state.tuneOffset !== 0 && <p>Transzponálás: {this.state.tuneOffset > NOTES.length / 2 ? -(NOTES.length - this.state.tuneOffset) / 2 : this.state.tuneOffset / 2} hang</p>}
                 <div className="ui divider"></div>
             </>
 

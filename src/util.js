@@ -98,3 +98,5 @@ export const removePlacesFromPlaylist = (playlist) => {
 export const BASE_URL = ""
 export const FULL_URL = "https://zenesz.okgy.hu"
 export const DICSI_FULL_URL = "https://dicsi.okgy.hu"
+
+export const mod = (n, m) => (((n % m) + m) % m)
