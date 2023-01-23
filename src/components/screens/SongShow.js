@@ -117,11 +117,14 @@ class SongShow extends React.Component {
         if (numberOfSpaces === 0) {
             return <span key={idx}>{line}<br/></span>
         }
+        if (this.state.tuneOffset === 0) {
+            return <span className="blue" key={idx}>{line}<br/></span>
+        }
         let newLine = ''
         let i = 0
         let skipSpace = false
         while (i < line.length) {
-            if (line[i] === line[i].toUpperCase() && isNaN(+line[i])) {
+            if (/^[A-Z]$/.test(line[i])) {
                 let note = line[i]
                 if (line[i + 1] === '#' || line[i + 1] === 'b') {
                     note = line[i] + line[i + 1]
@@ -174,19 +177,38 @@ class SongShow extends React.Component {
                     }
                 })
                 return (
-                    <div className="ui container grid nowrap roboto">
-                        <div className="eight wide column">
-                            {firstColumn}
+                    <>
+                        <div className="ui container grid nowrap roboto">
+                            <div className="eight wide column">
+                                {firstColumn}
+                            </div>
+                            <div className="eight wide column nowrap roboto">
+                                {secondColumn}
+                            </div>
                         </div>
-                        <div className="eight wide column nowrap roboto">
-                            {secondColumn}
+                        <div className="next-to">
+                            <MyButton tip="Transzponálás -" color="orange" onClick={() => this.onTune(-1)} icons={["music note", "arrow down" ]} />
+                            <MyButton tip="Transzponálás +" color="orange" onClick={() => this.onTune(1)} icons={["music note", "arrow up" ]} />
+                            <MyButton tip="Transzponálás visszaállítása" color="orange" onClick={() => this.resetTune()} icons={["music note", "undo" ]} />
                         </div>
-                    </div>
+                    </>
+
                 )
             } else {
-                return <div className="ui container nowrap roboto"> {this.props.song.verses.map((verse, idx) => {
-                    return this.renderVerse(verse, idx)
-                })}</div>
+                return (
+                    <>
+                        <div className="ui container nowrap roboto"> {this.props.song.verses.map((verse, idx) => {
+                            return this.renderVerse(verse, idx)
+                        })}
+                        </div>
+                        <div className="next-to">
+                            <MyButton tip="Transzponálás -" color="orange" onClick={() => this.onTune(-1)} icons={["music note", "arrow down" ]} />
+                            <MyButton tip="Transzponálás +" color="orange" onClick={() => this.onTune(1)} icons={["music note", "arrow up" ]} />
+                            <MyButton tip="Transzponálás visszaállítása" color="orange" onClick={() => this.resetTune()} icons={["music note", "undo" ]} />
+                        </div>
+                    </>
+
+                )
             }
         }
         if (!this.props.song.verses[this.state.currentVerse]) {
@@ -211,6 +233,7 @@ class SongShow extends React.Component {
                 <MyButton tip="Előző versszak" disabled={!this.state.oneVerseModeActive} color="teal" onClick={() => this.handleVerseChange(false)} icons={[" step backward icon" ]} />
                 <MyButton tip="Egyversszak mód be- és kikapcsolása" color="green" onClick={this.handleModeSwitch} icons={["play" ]} />
                 <MyButton tip="Következő vesszak" disabled={!this.state.oneVerseModeActive} color="teal" onClick={() => this.handleVerseChange(true)} icons={[" step forward icon" ]} />
+                <MyButton tip="Betűméret visszaállítása" color="primary" onClick={this.handleFontSizeReset} icons={["font", "undo" ]} />
             </>
         )*/null : null
         const optionalButtons = this.state.showButtons ? (
@@ -221,10 +244,6 @@ class SongShow extends React.Component {
                 {descButton}
                 <MyButton tip="Betűméret csökkentése" color="primary" onClick={() => this.onSizeChange(false)} icons={["font", "arrow down" ]} />
                 <MyButton tip="Betűméret növelése" color="primary" onClick={() => this.onSizeChange(true)} icons={["font", "arrow up " ]} />
-                <MyButton tip="Betűméret visszaállítása" color="primary" onClick={this.handleFontSizeReset} icons={["font", "undo" ]} />
-                <MyButton tip="Letranszponálás" color="orange" onClick={() => this.onTune(-1)} icons={["music note", "arrow down" ]} />
-                <MyButton tip="Feltranszponálás" color="orange" onClick={() => this.onTune(1)} icons={["music note", "arrow up" ]} />
-                <MyButton tip="Transzponálás visszaállítása" color="orange" onClick={() => this.resetTune()} icons={["music note", "undo" ]} />
                 <MyButton tip="Hozzáadás a lejátszási listához" color="green" onClick={this.onPlaylistAdd } icons={["plus" ]} />
                 <MyButton color="green" onClick={this.props.toggleVisibility} icons={["play circle"]} text=" Lejátszási lista"/>
             </>
