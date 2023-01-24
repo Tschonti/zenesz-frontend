@@ -35,3 +35,5 @@ export const LOGIN = 'LOGIN'
 export const LOGOUT = 'LOGOUT'
 
 export const RECOVER_STATE = 'RECOVER_STATE'
+
+export const TRANSPOSE_SONG = 'TRANSPOSE_SONG'

@@ -8,6 +8,7 @@ import '../../styles.css'
 import { fetchSong } from '../../actions/songActions'
 import { addToPlaylist, toggleVisibility } from '../../actions/playlistActions'
 import { removeAlert } from '../../actions/alertActions'
+import { transposeSong } from '../../actions/transposeActions'
 
 import MyLoader from '../MyLoader'
 import MyButton from '../MyButton'
@@ -29,7 +30,6 @@ class SongShow extends React.Component {
         showButtons: !isMobileOnly,
         twoColumnMode: false,
         showDesc: false,
-        tuneOffset: 0,
     }
 
     componentDidMount() {
@@ -66,11 +66,11 @@ class SongShow extends React.Component {
     }
 
     onTune = (offset) => {
-        this.setState({ tuneOffset: mod((this.state.tuneOffset + offset), NOTES.length)})
+        this.props.transposeSong(this.props.song.id, mod((this.props.transposeOffset + offset), NOTES.length))
     }
 
     resetTune = () => {
-        this.setState({ tuneOffset: 0 })
+        this.props.transposeSong(this.props.song.id, 0)
     }
 
     onDescChange = () => {
@@ -117,7 +117,7 @@ class SongShow extends React.Component {
         if (numberOfSpaces === 0) {
             return <span key={idx}>{line}<br/></span>
         }
-        if (this.state.tuneOffset === 0) {
+        if (this.props.transposeOffset === 0) {
             return <span className="blue" key={idx}>{line}<br/></span>
         }
         let newLine = ''
@@ -130,7 +130,7 @@ class SongShow extends React.Component {
                     note = line[i] + line[i + 1]
                     i++
                 }
-                const newNote = NOTES[mod((NOTES.indexOf(note) + this.state.tuneOffset), NOTES.length)]
+                const newNote = NOTES[mod((NOTES.indexOf(note) + this.props.transposeOffset), NOTES.length)]
                 if (newNote.length > 1) {
                     skipSpace = true
                 } else {
@@ -166,7 +166,7 @@ class SongShow extends React.Component {
             <MyButton tip="Transzponálás +" color="orange" onClick={() => this.onTune(1)} icons={["music note", "arrow up" ]} />
             <MyButton tip="Transzponálás visszaállítása" color="orange" onClick={() => this.resetTune()} icons={["music note", "undo" ]} />
         </div>
-        {this.state.tuneOffset !== 0 && <p>Transzponálás: {this.state.tuneOffset > NOTES.length / 2 ? -(NOTES.length - this.state.tuneOffset) : this.state.tuneOffset}</p>}
+        {this.props.transposeOffset !== 0 && <p>Transzponálás: {this.props.transposeOffset > NOTES.length / 2 ? -(NOTES.length - this.props.transposeOffset) : this.props.transposeOffset}</p>}
     </>
     )
 
@@ -329,8 +329,9 @@ const mapStateToProps = (state, ownProps) => {
     return {
         song: state.songs[ownProps.match.params.id],
         plVisible: state.playlist.visible,
-        signedIn: state.auth.signedIn
+        signedIn: state.auth.signedIn,
+        transposeOffset: state.transpose[ownProps.match.params.id] || 0
     }
 }
 
-export default connect(mapStateToProps, { fetchSong, removeAlert, addToPlaylist, toggleVisibility })(SongShow)
+export default connect(mapStateToProps, { fetchSong, removeAlert, addToPlaylist, toggleVisibility, transposeSong })(SongShow)
