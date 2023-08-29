@@ -1,7 +1,17 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans&display=swap');
+
 html, body {
     height: 100%;
     margin: 0;
     padding: 0;
+}
+
+.ui {
+    font-family: 'Open Sans', sans-serif!important;
+}
+
+.force-open-sans {
+    font-family: 'Open Sans', sans-serif!important;
 }
 
 .header-link {

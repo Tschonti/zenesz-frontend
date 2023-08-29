@@ -266,7 +266,7 @@ class SongShow extends React.Component {
                     {this.renderButtons()}
                     <div className="right-left">
                         <div>
-                            <h2 className="vert-centered">{this.props.song.id}. {this.props.song.title} </h2>
+                            <h2 className="force-open-sans vert-centered">{this.props.song.id}. {this.props.song.title} </h2>
                             <div style={{marginLeft:'10px', height: '30px', width: '30px', borderRadius: '100%', backgroundColor: '#' + this.props.song.color}}></div>
                         </div>
                         <MyButton color="gray" onClick={()=>this.setState({showButtons: !this.state.showButtons})} icons={["bars"]} tip="Gombok elrejtése/előhozása"/>
@@ -279,10 +279,10 @@ class SongShow extends React.Component {
             <>
                 <div className="right-left m-top">
                 <div className='next-to'>
-                            <h2 className="vert-centered">{this.props.song.id}. {this.props.song.title} </h2>
+                            <h2 className="force-open-sans vert-centered">{this.props.song.id}. {this.props.song.title} </h2>
                             <div style={{marginLeft:'10px', height: '30px', width: '30px', borderRadius: '100%', backgroundColor: '#' + this.props.song.color}}></div>
                         </div>
-                    <h2 className="vert-centered">{this.state.oneVerseModeActive ? `${this.state.currentVerse + 1}/${this.props.song.verses.length}` : ''}</h2>
+                    <h2 className="force-open-sans vert-centered">{this.state.oneVerseModeActive ? `${this.state.currentVerse + 1}/${this.props.song.verses.length}` : ''}</h2>
                     <div>
                         <MyButton color="gray" onClick={()=>this.setState({showButtons: !this.state.showButtons})} icons={["bars"]} tip="Gombok elrejtése/előhozása"/>
                         {this.renderButtons()}

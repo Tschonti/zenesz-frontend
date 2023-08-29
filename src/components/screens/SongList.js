@@ -70,7 +70,7 @@ class SongList extends React.Component {
             <Link to={`${BASE_URL}/songs/${song.id}`} className="notLinkStyle">
                 <div className="content right-left">
                     <div className='next-to'>
-                        <h3 className="header my-header-text">{song.id}. {song.title}</h3>
+                        <h3 className="force-open-sans header my-header-text">{song.id}. {song.title}</h3>
                     </div>
                     {this.renderSmallButtons(song)}
                 </div>

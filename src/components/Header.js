@@ -28,7 +28,7 @@ const Header = (props) => {
             <div className="ui secondary vertical menu my-mobile-header">
                 <div className="right-left">
                     <Link to={`${BASE_URL}`} className="item" onClick={() => setMenuOpen(false)}>
-                        <h2>ÖKGY akkordos dicsik</h2>
+                        <h2 className="force-open-sans">ÖKGY akkordos dicsik</h2>
                     </Link>
                     <div className='vert-centered'>
                         <i className="icon bars" onClick={() => setMenuOpen(!menuOpen)}></i>
@@ -51,7 +51,7 @@ const Header = (props) => {
     return (
         <div className="ui secondary pointing menu my-header">
             <Link to={`${BASE_URL}`} className="item ">
-                <h2>ÖKGY akkordos dicsik</h2>
+                <h2 className="force-open-sans">ÖKGY akkordos dicsik</h2>
             </Link>
             <Link to={`${BASE_URL}`} className="item header-link">Énekek listája</Link>
             {newSong}
