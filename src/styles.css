@@ -51,7 +51,7 @@ html, body {
 }
 
 .roboto {
-    font-family: "Ubuntu Mono", monospace;
+    font-family: "Ubuntu Mono", monospace!important;
 }
 
 .blue {
